@@ -34,8 +34,21 @@
       padding: 9.5px;
     }
     </style>
+	<script>
+	  function highlight_countries(countries) {
+   
+	   $.each(countries, function (element, country, array) {
+			//console.log('array[' + index + '] = ' + element);
+			var one_country = document.getElementById(country);
+			$(one_country).attr("class", "active")
+		})
+      }
+    </script>
   </head>
   <body>
+  <button onclick="highlight_countries(['FRA','TUN']);">FRA</button>
+
+	
     <div id="map"></div>
     <script src="//d3js.org/d3.v3.min.js"></script>
     <script src="//d3js.org/topojson.v1.min.js"></script>
@@ -108,14 +121,10 @@
 		   .attr("x", get_xyz(d)[0])
 		   .attr("y", get_xyz(d)[1])
 		   .attr("id", "cOverName");
-	  console.log("selected country: ", d.properties.name);
+	        //console.log("selected country: ", d.properties.name);
 		   
-		   
-
 		d3.select(this).attr("class", "active")
-
-   
-	}
+	  }
     }
 	
 	function out_country(d){
