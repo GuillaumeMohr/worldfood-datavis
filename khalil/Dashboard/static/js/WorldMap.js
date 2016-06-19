@@ -1,3 +1,12 @@
+ function highlight_countries(countries) {
+   
+     $.each(countries, function (element, country, array) {
+      //console.log('array[' + index + '] = ' + element);
+      var one_country = document.getElementById(country);
+      $(one_country).attr("class", "active")
+    })
+      }
+
 var m_width = $("#map").width(),
         width = 938,
         height = 500,
