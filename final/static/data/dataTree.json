@@ -1,0 +1,27 @@
+{
+"name": "root", 
+"children": [
+{"name": "aggI", 
+"children": [{"name": "1", 
+"children": [
+{"name": "a"}]}, 
+{"name": "2", 
+"children": [
+{"name": "b"}, 
+{"name": "c"}]}]}, 
+{"name": "aggII", 
+"children": [
+{"name": "3", 
+"children": [
+{"name": "d"}, 
+{"name": "e"}]}]}, 
+{"name": "aggIII", 
+"children": [
+{"name": "4", 
+"children": [
+{"name": "f"}]}, 
+{"name": "5", 
+"children": 
+[{"name": "g"}, 
+{"name": "h"}]}, 
+{"name": "6", "children": [{"name": "i"}]}]}]}
