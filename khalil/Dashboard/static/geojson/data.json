@@ -4,24 +4,24 @@
 {"name": "aggI", 
 "children": [{"name": "1", 
 "children": [
-{"name": "a", "size": 1250}]}, 
+{"name": "a"}]}, 
 {"name": "2", 
 "children": [
-{"name": "b", "size": 1250}, 
-{"name": "c", "size": 1250}]}]}, 
+{"name": "b"}, 
+{"name": "c"}]}]}, 
 {"name": "aggII", 
 "children": [
 {"name": "3", 
 "children": [
-{"name": "d", "size": 1250}, 
-{"name": "e", "size": 1250}]}]}, 
+{"name": "d"}, 
+{"name": "e"}]}]}, 
 {"name": "aggIII", 
 "children": [
 {"name": "4", 
 "children": [
-{"name": "f", "size": 1250}]}, 
+{"name": "f"}]}, 
 {"name": "5", 
 "children": 
-[{"name": "g", "size": 1250}, 
-{"name": "h", "size": 1250}]}, 
-{"name": "6", "children": [{"name": "i", "size": 1250}]}]}]}
+[{"name": "g"}, 
+{"name": "h"}]}, 
+{"name": "6", "children": [{"name": "i"}]}]}]}
