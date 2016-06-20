@@ -1,3 +1,4 @@
+
 var datasetBarChart = [
 { group: "All", category: "Oranges", measure: 63850.4963 }, 
 { group: "All", category: "Apples", measure: 78258.0845 }, 
