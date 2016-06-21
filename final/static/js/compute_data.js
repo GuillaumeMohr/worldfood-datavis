@@ -14,7 +14,7 @@ var nutritionals = [
 	"carbohydrates_100g"
 ];
 
-data = d3.csv('data/data.csv')
+data = d3.csv('static/data/data.csv')
 	.row(function(r) {
 		return {
 			product_name: r.product_name,
