@@ -1,4 +1,4 @@
- function highlight_countries(countries) {
+ function update_map(countries) {
    
      $.each(countries, function (element, country, array) {
       //console.log('array[' + index + '] = ' + element);
@@ -71,21 +71,18 @@ var m_width = $("#map").width(),
     function over_country(d) {
 	
 	  if (d){
-    var coords = d3.mouse(this);
-    var svg = d3.select("#map").select("svg");
-		svg.append("text").text(d.properties.name)
-		   .attr("x", get_xyz(d)[0])
-		   .attr("y", get_xyz(d)[1])
-		   .attr("id", "cOverName");
-	  console.log("selected country: ", d.properties.name);
-		console.log(get_xyz(d)[0]);
-    console.log(get_xyz(d)[1]);   
-		   
-
-		d3.select(this).attr("class", "active")
-
-   
-	}
+			var coords = d3.mouse(this);
+			var svg = d3.select("#map").select("svg");
+			svg.append("text").text(d.properties.name)
+				.attr("x", get_xyz(d)[0])
+				.attr("y", get_xyz(d)[1])
+				.attr("id", "cOverName");
+			console.log("over country: ", d.id);
+			//console.log(get_xyz(d)[0]);
+			//console.log(get_xyz(d)[1]);   
+	
+			d3.select(this).attr("class", "active")
+	    }
     }
 	
 	function out_country(d){
@@ -95,17 +92,19 @@ var m_width = $("#map").width(),
 
     function country_clicked(d) {
 	  if (d){
-	  console.log("selected country: ", d.properties.name)}
+		console.log("clicked country: ", d.properties.name)
+	  }
       g.selectAll(["#states", "#cities"]).remove();
       state = null;
 
       if (country) {
-        g.selectAll("#" + country.id).style('display', null);
+		g.selectAll("#" + country.id).style('display', null);
       }
 
       if (d && country !== d) {
         var xyz = get_xyz(d);
         zoom(xyz);
+		compute_data({country_id: d.id})
         
       } else {
         var xyz = [width / 2, height / 1.5, 1];
