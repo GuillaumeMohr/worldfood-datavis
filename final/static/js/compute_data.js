@@ -42,8 +42,9 @@ var test_new_data_0 = {country_id: "DEU", category: null};
 var test_new_data_1 = {country_id: null, category: ["root", "Sugary sncacks"]};
 
 function rename_nested(data) {
-	if (data.values == null) return {name: data.key};
-	else return {name: data.key, children: data.values.map(rename_nested)};
+	if (data.values.constructor === Array )
+		return {name: data.key, children: data.values.map(rename_nested)}; 
+	else return {name: data.key, children: {name: "#products = " + data.values}};
 }
 
 function compute_data(new_data) {
@@ -62,8 +63,9 @@ function compute_data(new_data) {
 			children: d3.nest()
 			.key(function(d) { return d.category; })
 			.key(function(d) { return d.subcategory; })
-			.key(function(d) { return d.product_name; })
-			.rollup(function(l) { return null; })
+			.rollup(function(l) { return l.length; })
+			//.key(function(d) { return d.product_name; })
+			//.rollup(function(l) { return null; })
 			.entries(useful_data)
 			.map(rename_nested)
 		}
