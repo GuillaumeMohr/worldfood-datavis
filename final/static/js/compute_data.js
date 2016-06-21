@@ -51,7 +51,7 @@ function compute_data(new_data) {
 	var nested_data;
 	var stats;
 	// Fist case : the country_id
-	if(new_data.country_id != null) {
+	if("country_id" in new_data && new_data.country_id != null) {
 		// we filter on the selected country
 		var useful_data = csv_data.filter(function(d) {
 			return (d.code_country === new_data.country_id)
@@ -76,7 +76,8 @@ function compute_data(new_data) {
 		// and we only show the selected contry
 		country_id_list = [new_data.country_id];
 	}
-	else if (new_data.category != null) {
+	// Second case : a category or a product has been selected
+	else if ("category" in new_data && new_data.category != null) {
 		console.log("manage category !");
 	}
 	update_all({
