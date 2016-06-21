@@ -21,14 +21,29 @@ var svg = d3.select("#collapsedTree").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+// tree init
 d3.json("static/data/data.json", function(error, flare) {
-// flare is the root element: { name: "root", children: Array[3], x0: 130, y0: 0, depth: 0, x: 130, y: 0, id: 4 }
   if (error) throw error;
   console.log(flare);
   root = flare;
   root.x0 = height / 2;
   root.y0 = 0;
-
+  function collapse(d) {
+  if (d.children) {
+    d._children = d.children;
+    d._children.forEach(collapse);
+    d.children = null;
+  }
+  }
+  root.children.forEach(collapse);
+  update(root);
+});
+// tree update
+function update_tree(dataTree) {
+  console.log(dataTree);
+  root = dataTree;
+  root.x0 = height / 2;
+  root.y0 = 0;
   function collapse(d) {
     if (d.children) {
       d._children = d.children;
@@ -36,10 +51,9 @@ d3.json("static/data/data.json", function(error, flare) {
       d.children = null;
     }
   }
-
   root.children.forEach(collapse);
   update(root);
-});
+}
 
 d3.select(self.frameElement).style("height", "800px");
 
