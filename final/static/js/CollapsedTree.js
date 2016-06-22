@@ -46,8 +46,19 @@ function update_tree(dataTree) {
   root.y0 = 0;
   function collapse(d) {
     if (d.children) {
+      console.log(d);
+      console.log("---------");
       d._children = d.children;
-      d._children.forEach(collapse);
+      var x = [];
+      if (Array.isArray(d._children))
+        d._children.forEach(collapse);
+      else
+      {
+        d._children = [d._children];
+        //x.push(d._children);
+        d._children.forEach(collapse);
+      }
+
       d.children = null;
     }
   }
@@ -149,7 +160,7 @@ function update(source) {
 
 // Toggle children on click.
 function click(d) {
-  updateBarChart(d.name);
+  //updateBarChart(d.name);
 	console.log(d.name);
   if (d.children) {
     d._children = d.children;
