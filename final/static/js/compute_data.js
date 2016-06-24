@@ -43,8 +43,8 @@ var test_new_data_1 = {country_id: null, category: ["root", "Sugary sncacks"]};
 
 function rename_nested(data) {
 	if (data.values.constructor === Array )
-		return {name: data.key, children: data.values.map(rename_nested)}; 
-	else return {name: data.key, children: {name: "#products = " + data.values}};
+		return {name: data.key, level: "1", children: data.values.map(rename_nested)}; 
+	else return {name: data.key, level: "2", children: {name: "#products = " + data.values, level:"3"}};
 }
 
 function compute_data(new_data) {
@@ -60,6 +60,7 @@ function compute_data(new_data) {
 		// we compute the tree
 		nested_data = {
 			name: "root",
+			level: "0",
 			children: d3.nest()
 			.key(function(d) { return d.category; })
 			.key(function(d) { return d.subcategory; })
@@ -93,7 +94,7 @@ function update_all(data) {
 	console.log("update_all");
 	console.log(data);
 
-	update_map(data.country_id_list);
+	//update_map(data.country_id_list);
 	update_tree(data.tree);
-	update_bars(data.stats);
+	//update_bars(data.stats);
 }
