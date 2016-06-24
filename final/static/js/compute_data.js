@@ -1,4 +1,4 @@
-var csv_data;
+var csv_data; // global variable with complete data
 
 // constant
 var nutritionals = [
@@ -44,10 +44,16 @@ var test_new_data_1 = {country_id: null, category: ["root", "Sugary sncacks"]};
 function rename_nested(data) {
 	if (data.values.constructor === Array )
 		return {name: data.key, children: data.values.map(rename_nested)}; 
-	else return {name: data.key, children: {name: "#products = " + data.values}};
+	else return {name: data.key, children: {name: "#products = " + data.values, children: null}};
 }
 
 function compute_data(new_data) {
+	/* new_data is an object with possible fields :
+	 *   country_id (string): used in case the user click on a country on the map
+	 *   query (string): used in case the user click on the tree afte
+	 *   level (int)
+	 *   category (string)
+	 */
 	var country_id_list;
 	var nested_data;
 	var stats;
@@ -77,15 +83,44 @@ function compute_data(new_data) {
 		});
 		// and we only show the selected contry
 		country_id_list = [new_data.country_id];
+		query = new_data.country_id;
 	}
 	// Second case : a category or a product has been selected
-	else if ("category" in new_data && new_data.category != null) {
+	else if ("category" in new_data && new_data.category != null &&
+		 "level" in new_data && level != null &
+		 "query" in new_data && level != null) {
 		console.log("manage category !");
+		// we filter on the selected country
+		var useful_data = csv_data.filter(function(d) {
+			return (d.code_country === new_data.query)
+		});
+		// we compute the tree
+		nested_data = {
+			name: "root",
+			children: d3.nest()
+			.key(function(d) { return d.category; })
+			.key(function(d) { return d.subcategory; })
+			.rollup(function(l) { return l.length; })
+			//.key(function(d) { return d.product_name; })
+			//.rollup(function(l) { return null; })
+			.entries(useful_data)
+			.map(rename_nested)
+		}
+		console.log(nested_data);
+		// we compute the stats
+		stats = nutritionals.map(function(n) {
+			return {name: n,
+				mean: d3.mean(useful_data, function(d) { return d[n] })};
+		});
+		// and we only show the selected contry
+		country_id_list = [new_data.country_id];
+		query = new_data.country_id;
 	}
 	update_all({
 		country_id_list: country_id_list,
 		tree: nested_data,
-		stats: stats
+		stats: stats,
+		query: query
 	});
 }
 
@@ -94,6 +129,6 @@ function update_all(data) {
 	console.log(data);
 
 	update_map(data.country_id_list);
-	update_tree(data.tree);
+	update_tree(data.tree, query);
 	update_bars(data.stats);
 }
