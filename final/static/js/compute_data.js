@@ -135,6 +135,6 @@ function update_all(data) {
 	console.log(data);
 
 	//update_map(data.country_id_list);
-	update_tree(data.tree);
+	update_tree(data.tree,data.query);
 	//update_bars(data.stats);
 }
