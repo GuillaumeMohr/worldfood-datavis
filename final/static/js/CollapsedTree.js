@@ -4,6 +4,7 @@ var margin = {top: 20, right: 120, bottom: 20, left: 50},  // left: 120,top: 20
     width = 500 //- margin.right - margin.left,
     height = 300 //- margin.top - margin.bottom;
 
+var selected_country = null;
 var i = 0,
     duration = 750,
     root;
@@ -39,8 +40,9 @@ d3.json("static/data/data.json", function(error, flare) {
   update(root);
 });
 // tree update
-function update_tree(dataTree) {
+function update_tree(dataTree,query) {
   console.log(dataTree);
+  selected_country = query;
   root = dataTree;
   root.x0 = height / 2;
   root.y0 = 0;
@@ -161,7 +163,9 @@ function update(source) {
 // Toggle children on click.
 function click(d) {
   //updateBarChart(d.name);
-	console.log(d.name);
+  console.log(selected_country);
+  console.log({level: d.level, category: d.name, query: selected_country});
+	//compute_data({level: d.level, button_name: d.name});
   if (d.children) {
     d._children = d.children;
     d.children = null;
