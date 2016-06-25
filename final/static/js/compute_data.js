@@ -41,21 +41,14 @@ data = d3.csv('static/data/data.csv')
 var test_new_data_0 = {country_id: "DEU", category: null};
 var test_new_data_1 = {country_id: null, category: ["root", "Sugary sncacks"]};
 
-function rename_nested_old(data) {
-	// TODO : REMOVE
-	if (data.values.constructor === Array )
-		return {name: data.key, level: "1", children: data.values.map(rename_nested)}; 
-	else return {
-		name: data.key, 
-		level: "2", 
-		children: {name: "#products = " + data.values, level:"3"}
-	};
-}
 
 function rename_nested(data, level) {
+	//console.log("[RENAME_NESTED] input (data, level)");
+	//console.log(data);
+	//console.log(level);
 	var children = [];
-	if (data.values.constructor === Array ) 
-		children = data.values.map(function(d) {rename_nested(d, level+1)});
+	if (data.values != null) 
+		children = data.values.map(function(d) {return rename_nested(d, level+1);});
 	return {
 		name: data.key, 
 		level: level, 
@@ -67,25 +60,36 @@ function prune(nested_data, level, category) {
 	/*
 	 * Prune the nested data: only one element up until "level", then all of its children
 	 */
+	//console.log("[PRUNE] arguments received (nested_data, level, category");
+	//console.log(nested_data);
+	//console.log(level);
+	//console.log(category);
 	var children;
 	// if we are at the children we want to display
 	if (nested_data.level > level) children = [];
 	// if we are at the node clicked on by the user
-	else if (nested_data.level === level && nested_data.category === category) { 
-		children = nested_data.children.map(function(d) {prune(d, level, category);});
+	else if (nested_data.level === level && nested_data.name === category) { 
+		children = nested_data.children.map(function(d) {return prune(d, level, category);});
 	}
 	// if we are at the brother nodes that we do not want to display
 	else if (nested_data.level === level) return null;
 	// if we are at a (grand)parent or (grand)uncle nodes
 	else {
 		children = nested_data.children
-			.map(function(d) {prune(d, level, category);})
-			.filter(function(d) {d != null});
+			.map(function(d) {return prune(d, level, category);})
+			.filter(function(d) {return d != null;});
 		// if all children are null, then we should not display the node
 		if (children.length === 0) return null;
 	}
 	nested_data.children = children;
 	return nested_data;
+	/*
+	return {
+		name: nested_data.name,
+		level: nested_data.level,
+		children: children
+	};
+	*/
 }
 
 function compute_data(new_data) {
@@ -95,6 +99,8 @@ function compute_data(new_data) {
 	 *   level (int)
 	 *   category (string)
 	 */
+	console.log("[COMPUTE_DATA]: received argument");
+	console.log(new_data);
 	var country_id_list;
 	var nested_data;
 	var stats;
@@ -151,10 +157,16 @@ function compute_data(new_data) {
 				.key(function(d) { return d.product_name; })
 				.rollup(function(l) { return null; })
 				.entries(useful_data)
-				.map(function(d) {rename_nested(d, 1);})
+				.map(function(d) {return rename_nested(d, 1);})
 		};
 		// we prune the tree
-		nested_data = prune(nested_data, new_data.level, new_data.category)
+		console.log("[COMPUTE_DATA]: full tree before pruning");
+		console.log(nested_data);
+
+		nested_data = prune(nested_data, new_data.level, new_data.category);
+
+		console.log("[COMPUTE_DATA]: tree after pruning");
+		console.log(nested_data);
 		
 		// we compute the stats
 		stats = nutritionals.map(function(n) {
@@ -162,8 +174,8 @@ function compute_data(new_data) {
 				mean: d3.mean(useful_data, function(d) { return d[n] })};
 		});
 		// and we only show the selected contry
-		country_id_list = [new_data.country_id];
-		query = new_data.country_id;
+		country_id_list = [query];
+		query = new_data.query;
 	}
 	update_all({
 		country_id_list: country_id_list,

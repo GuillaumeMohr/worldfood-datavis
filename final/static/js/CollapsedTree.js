@@ -163,9 +163,11 @@ function update(source) {
 // Toggle children on click.
 function click(d) {
   //updateBarChart(d.name);
+  console.log("[CollapsedTree click] selected_country, object sent to compute_data");
   console.log(selected_country);
   console.log({level: d.level, category: d.name, query: selected_country});
-	//compute_data({level: d.level, button_name: d.name});
+  compute_data({level: d.level, category: d.name, query: selected_country});
+  /*
   if (d.children) {
     d._children = d.children;
     d.children = null;
@@ -174,5 +176,6 @@ function click(d) {
     d._children = null;
   }
   update(d);
+  */
 }
 
