@@ -51,17 +51,10 @@ function update_tree(dataTree,query) {
       console.log(d);
       console.log("---------");
       d._children = d.children;
-      var x = [];
-      if (Array.isArray(d._children))
-        d._children.forEach(collapse);
-      else
-      {
-        d._children = [d._children];
-        //x.push(d._children);
-        d._children.forEach(collapse);
-      }
-
+      //update(d);
+      d._children.forEach(collapse);
       d.children = null;
+
     }
   }
   root.children.forEach(collapse);
@@ -72,10 +65,12 @@ d3.select(self.frameElement).style("height", "800px");
 
 function update(source) {
 
+  console.log(source);
   // Compute the new tree layout.
   var nodes = tree.nodes(root).reverse(),
       links = tree.links(nodes);
-
+// tree.nodes(root.children[0]).reverse()
+  console.log(nodes);
   // Normalize for fixed-depth.
   nodes.forEach(function(d) { d.y = d.depth * 90; });  // changer la longueur de l'arc
 
@@ -161,21 +156,30 @@ function update(source) {
 }
 
 // Toggle children on click.
+
+function simulate_clicks(source) {
+  console.log(source)
+  if (source.children) {
+    source._children = source.children;
+    source._children.forEach(simulate_clicks);
+    source.children = null;
+    
+  } else {
+    source.children = source._children;
+    source.children.forEach(simulate_clicks);
+    source._children = null;
+    
+  }
+ update(source);
+}
+
 function click(d) {
   //updateBarChart(d.name);
   console.log("[CollapsedTree click] selected_country, object sent to compute_data");
   console.log(selected_country);
   console.log({level: d.level, category: d.name, query: selected_country});
   compute_data({level: d.level, category: d.name, query: selected_country});
-  /*
-  if (d.children) {
-    d._children = d.children;
-    d.children = null;
-  } else {
-    d.children = d._children;
-    d._children = null;
-  }
-  update(d);
-  */
+  root.children.forEach(simulate_clicks)
+  
 }
 
