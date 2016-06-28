@@ -50,7 +50,14 @@
  }
 
  function update_map(countries) {
-     select_countries(countries)
+	 if (countries.length > 0){
+		select_countries(countries)
+	 }
+	 else {
+		deselect_countries(which) 
+		var xyz = [width, height, 1];
+         zoom(xyz);
+	 }
  }
 
  var m_width = $("#map").width(),
