@@ -56,7 +56,7 @@ function rename_nested(data, level) {
 	};
 }
 
-function prune(nested_data, level, category) {
+function prune_nested(nested_data, level, category) {
 	/*
 	 * Prune the nested data: only one element up until "level", then all of its children
 	 */
@@ -69,27 +69,26 @@ function prune(nested_data, level, category) {
 	if (nested_data.level > level) children = [];
 	// if we are at the node clicked on by the user
 	else if (nested_data.level === level && nested_data.name === category) { 
-		children = nested_data.children.map(function(d) {return prune(d, level, category);});
+		children = nested_data.children.map(function(d) {return prune_nested(d, level, category);});
 	}
 	// if we are at the brother nodes that we do not want to display
-	else if (nested_data.level === level) return null;
+	else if (nested_data.level === level)  return null;
 	// if we are at a (grand)parent or (grand)uncle nodes
 	else {
 		children = nested_data.children
-			.map(function(d) {return prune(d, level, category);})
+			.map(function(d) {return prune_nested(d, level, category);})
 			.filter(function(d) {return d != null;});
 		// if all children are null, then we should not display the node
 		if (children.length === 0) return null;
 	}
-	nested_data.children = children;
-	return nested_data;
-	/*
+	//nested_data["children"] = children;
+	console.log("[PRUNE] output nested_data");
+	console.log(nested_data);
 	return {
 		name: nested_data.name,
 		level: nested_data.level,
 		children: children
 	};
-	*/
 }
 
 function compute_data(new_data) {
@@ -116,9 +115,6 @@ function compute_data(new_data) {
 			level: 0,
 			children: d3.nest()
 				.key(function(d) { return d.category; })
-				//.key(function(d) { return d.subcategory; })
-				//.rollup(function(l) { return l.length; })
-				//.key(function(d) { return d.product_name; })
 				.rollup(function(l) { return null; })
 				.entries(useful_data)
 				.map(function(d) {
@@ -163,7 +159,7 @@ function compute_data(new_data) {
 		console.log("[COMPUTE_DATA]: full tree before pruning");
 		console.log(nested_data);
 
-		nested_data = prune(nested_data, new_data.level, new_data.category);
+		nested_data = prune_nested(nested_data, new_data.level, new_data.category);
 
 		console.log("[COMPUTE_DATA]: tree after pruning");
 		console.log(nested_data);
