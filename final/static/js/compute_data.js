@@ -103,8 +103,35 @@ function compute_data(new_data) {
 	var country_id_list;
 	var nested_data;
 	var stats;
+	// Reset case
+	if("query" in new_data && new_data.query === "reset") {
+		// we compute the tree
+		nested_data = {
+			name: "root",
+			level: 0,
+			children: d3.nest()
+				.key(function(d) { return d.category; })
+				.rollup(function(l) { return null; })
+				.entries(csv_data)
+				.map(function(d) {
+					return {
+						name: d.key,
+						level: 1,
+						children: []
+					};
+				})
+		};
+		// we compute the stats
+		stats = nutritionals.map(function(n) {
+			return {name: n,
+				mean: d3.mean(csv_data, function(d) { return d[n] })};
+		});
+		// and we only show the selected contry
+		country_id_list = [];
+		query = new_data.country_id;
+	}
 	// Fist case : the country_id
-	if("country_id" in new_data && new_data.country_id != null) {
+	else if("country_id" in new_data && new_data.country_id != null) {
 		// we filter on the selected country
 		var useful_data = csv_data.filter(function(d) {
 			return (d.code_country === new_data.country_id)
@@ -185,7 +212,7 @@ function update_all(data) {
 	console.log("update_all");
 	console.log(data);
 
-	//update_map(data.country_id_list);
+	update_map(data.country_id_list);
 	update_tree(data.tree,data.query);
 	//update_bars(data.stats);
 }
