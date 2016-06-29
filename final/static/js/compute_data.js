@@ -103,16 +103,18 @@ function compute_data(new_data) {
 	var country_id_list;
 	var nested_data;
 	var stats;
+	var useful_data;
 	// Reset case
 	if("query" in new_data && new_data.query === "reset") {
 		// we compute the tree
+		useful_data = csv_data;
 		nested_data = {
 			name: "root",
 			level: 0,
 			children: d3.nest()
 				.key(function(d) { return d.category; })
 				.rollup(function(l) { return null; })
-				.entries(csv_data)
+				.entries(useful_data)
 				.map(function(d) {
 					return {
 						name: d.key,
@@ -128,7 +130,7 @@ function compute_data(new_data) {
 	// Fist case : the country_id
 	else if("country_id" in new_data && new_data.country_id != null) {
 		// we filter on the selected country
-		var useful_data = csv_data.filter(function(d) {
+		useful_data = csv_data.filter(function(d) {
 			return (d.code_country === new_data.country_id)
 		});
 		// we compute the tree
@@ -157,7 +159,7 @@ function compute_data(new_data) {
 		 "query" in new_data && new_data.query != null) {
 		console.log("manage category !");
 		// we filter on the selected country
-		var useful_data = csv_data.filter(function(d) {
+		useful_data = csv_data.filter(function(d) {
 			return (d.code_country === new_data.query)
 		});
 		// we compute the tree
@@ -193,7 +195,7 @@ function compute_data(new_data) {
 			data: nutritionals.map(function(n) {
 				return {
 					name: n,
-					mean: d3.mean(csv_data, function(d) { return d[n] })
+					mean: d3.mean(useful_data, function(d) { return Math.log10(d[n]) })
 				};
 			})
 		}
