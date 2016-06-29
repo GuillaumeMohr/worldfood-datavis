@@ -82,8 +82,8 @@ function prune_nested(nested_data, level, category) {
 		if (children.length === 0) return null;
 	}
 	//nested_data["children"] = children;
-	console.log("[PRUNE] output nested_data");
-	console.log(nested_data);
+	//console.log("[PRUNE] output nested_data");
+	//console.log(nested_data);
 	return {
 		name: nested_data.name,
 		level: nested_data.level,
@@ -121,11 +121,6 @@ function compute_data(new_data) {
 					};
 				})
 		};
-		// we compute the stats
-		stats = nutritionals.map(function(n) {
-			return {name: n,
-				mean: d3.mean(csv_data, function(d) { return d[n] })};
-		});
 		// and we only show the selected contry
 		country_id_list = [];
 		query = new_data.country_id;
@@ -152,11 +147,6 @@ function compute_data(new_data) {
 					};
 				})
 		};
-		// we compute the stats
-		stats = nutritionals.map(function(n) {
-			return {name: n,
-				mean: d3.mean(useful_data, function(d) { return d[n] })};
-		});
 		// and we only show the selected contry
 		country_id_list = [new_data.country_id];
 		query = new_data.country_id;
@@ -191,15 +181,23 @@ function compute_data(new_data) {
 		console.log("[COMPUTE_DATA]: tree after pruning");
 		console.log(nested_data);
 		
-		// we compute the stats
-		stats = nutritionals.map(function(n) {
-			return {name: n,
-				mean: d3.mean(useful_data, function(d) { return d[n] })};
-		});
 		// and we only show the selected contry
 		country_id_list = [query];
 		query = new_data.query;
 	}
+	// we compute the stats
+	stats = {
+		product: null,
+		others: {
+			name: "All Products",
+			data: nutritionals.map(function(n) {
+				return {
+					name: n,
+					mean: d3.mean(csv_data, function(d) { return d[n] })
+				};
+			})
+		}
+	};
 	update_all({
 		country_id_list: country_id_list,
 		tree: nested_data,
@@ -214,5 +212,5 @@ function update_all(data) {
 
 	update_map(data.country_id_list);
 	update_tree(data.tree,data.query);
-	//update_bars(data.stats);
+	update_bars(data.stats);
 }
