@@ -7,7 +7,7 @@ var nutritionals = [
 	"sodium_100g",
 	"salt_100g",
 	"proteins_100g",
-	"energy_100g",
+	//"energy_100g",
 	"saturated_fat_100g",
 	"sugars_100g",
 	"fat_100g",
@@ -195,7 +195,7 @@ function compute_data(new_data) {
 			data: nutritionals.map(function(n) {
 				return {
 					name: n,
-					mean: d3.mean(useful_data, function(d) { return Math.log10(d[n]) })
+					mean: d3.mean(useful_data, function(d) { return d[n] })
 				};
 			})
 		}
