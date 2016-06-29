@@ -26,10 +26,12 @@
  };
 
  function deselect_countries(countries) {
-     $.each(countries, function(element, country, array) {
-             var one_country = document.getElementById(country);
-             $(one_country).attr("class", "")
-         })
+	 if (countries != null){
+		 $.each(countries, function(element, country, array) {
+				 var one_country = document.getElementById(country);
+				 $(one_country).attr("class", "")
+			 })
+	 }
          //which = null;
  }
 
