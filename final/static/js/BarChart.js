@@ -108,7 +108,7 @@
 						mean: 11.625,
 						name: "nutrition_score_uk_100g"
 					}, {
-						mean: 15,
+						mean: -15,
 						name: "aautre_valeur_nutri"
 					}]
 				}
