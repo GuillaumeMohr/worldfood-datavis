@@ -196,7 +196,7 @@ function compute_data(new_data) {
 			data: nutritionals.map(function(n) {
 				return {
 					name: n,
-					mean: d3.mean(useful_data, function(d) { return Math.log10(d[n]) })
+					mean: d3.mean(useful_data, function(d) { return d[n] })
 				};
 			})
 		}
@@ -235,7 +235,9 @@ function update_all(data) {
 	console.log("update_all");
 	console.log(data);
 
-	update_map(data.country_id_list);
+	
 	update_tree(data.tree,data.query);
-	update_bars(data.stats);
+	update_map(data.country_id_list);
+	
+	//update_bars(data.stats);
 }
