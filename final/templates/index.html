@@ -23,9 +23,6 @@
   shape-rendering: crispEdges;
 }
 
-.bar text {
-  fill: #fff;
-}
 
 .axis path, .axis line {
   fill: none;
@@ -58,6 +55,37 @@
       margin-bottom: 0;
       padding: 9.5px;
     }
+
+.chart .legend {
+	fill: black;
+	font: 14px sans-serif;
+	text-anchor: start;
+	font-size: 12px;
+}
+
+.chart text {
+	fill: black;
+	font: 10px sans-serif;
+	text-anchor: start;
+}
+
+.chart .label {
+	fill: black;
+	font: 14px sans-serif;
+	text-anchor: end;
+}
+
+.bar:hover {
+	fill: NONE;
+}
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+
 </style>
 
 
@@ -121,7 +149,7 @@
             Bar Chart
           </div>
           <div class="chart-stage">
-            <div id="BarChart"></div>
+            <svg class="chart"></svg>
           </div>
         </div>
       </div>
@@ -139,7 +167,7 @@
   <script src="//d3js.org/topojson.v1.min.js"></script>
 
   
-  <script src='./static/js/BarChart.js' type='text/javascript'></script> 
+  <script src='./static/js/BarChartVert.js' type='text/javascript'></script> 
   <script src='./static/js/WorldMap.js' type='text/javascript'></script>
   <script src='./static/js/CollapsedTree.js' type='text/javascript'></script> 
   <script src='./static/js/compute_data.js' type='text/javascript'></script> 
