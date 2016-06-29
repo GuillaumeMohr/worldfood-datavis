@@ -238,6 +238,5 @@ function update_all(data) {
 	
 	update_tree(data.tree,data.query);
 	update_map(data.country_id_list);
-	
-	//update_bars(data.stats);
+	update_bars(data.stats);
 }
