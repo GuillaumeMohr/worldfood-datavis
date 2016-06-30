@@ -183,8 +183,15 @@ function click(d) {
   compute_data({level: d.level, category: d.name, query: selected_country});
   //root.children.forEach(simulate_clicks);
   svg.selectAll("g.node").remove();
+  svg.selectAll("path.link").remove();
+
+
 
   // create a new queue
+if (d.name=="root")
+  update(root);
+else
+{
 var queue = new Queue();
 
 // enqueue an item
@@ -206,5 +213,8 @@ while(item)
   } 
   item = queue.dequeue()
 }
+
+}
+
 } 
 
