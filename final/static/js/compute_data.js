@@ -26,7 +26,7 @@ data = d3.csv('static/data/data.csv')
 			sodium_100g: +r.sodium_100g,
 			salt_100g: +r.salt_100g,	
 			proteins_100g: +r.proteins_100g,
-			energy_100g: +r.energy_100g,
+			//energy_100g: +r.energy_100g,
 			saturated_fat_100g: +r["saturated-fat_100g"],	
 			sugars_100g: +r.sugars_100g,
 			fat_100g: +r.fat_100g,
@@ -188,6 +188,7 @@ function compute_data(new_data) {
 		query = new_data.query;
 	}
 	// we compute the stats
+	/*
 	stats = {
 		product: null,
 		others: {
@@ -200,6 +201,28 @@ function compute_data(new_data) {
 			})
 		}
 	};
+	*/
+	stats = {
+		labels: nutritionals,
+		series: [
+			{
+			label: 'Nutritional Value',
+			values: nutritionals.map(function(n) {
+				var m = d3.mean(useful_data, function(d) { return d[n] });
+				if(typeof m !== 'undefined') return m;
+				return 0;
+				})
+			},
+			{
+			label: 'Mean nutritional value of category',
+			values: nutritionals.map(function(n) {
+				var m = d3.mean(csv_data, function(d) { return d[n] });
+				if(typeof m !== 'undefined') return m;
+				return 0;
+				})
+			}
+		]
+	}
 	update_all({
 		country_id_list: country_id_list,
 		tree: nested_data,
@@ -212,7 +235,8 @@ function update_all(data) {
 	console.log("update_all");
 	console.log(data);
 
-	update_map(data.country_id_list);
+	
 	update_tree(data.tree,data.query);
+	update_map(data.country_id_list);
 	update_bars(data.stats);
 }

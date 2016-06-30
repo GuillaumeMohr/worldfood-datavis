@@ -180,14 +180,9 @@ function simulate_clicks(source) {
 }
 
 function click(d) {
-  //updateBarChart(d.name);
-  //console.log("[CollapsedTree click] selected_country, object sent to compute_data");
-  //console.log(selected_country);
-  //console.log({level: d.level, category: d.name, query: selected_country});
   compute_data({level: d.level, category: d.name, query: selected_country});
   //root.children.forEach(simulate_clicks);
   svg.selectAll("g.node").remove();
- // var childsFile = root.children;  // Array of root childrens
 
   // create a new queue
 var queue = new Queue();
@@ -202,28 +197,14 @@ while(item)
 {
   for (i=0;i<item.length;i++)
   {
-    if (item[i]._children.length!=0)
-    queue.enqueue(item[i]._children);
-    simulate_clicks(item[i]);
+    if (item[i]._children.length!=0 || d.name == "root")
+    {
+      queue.enqueue(item[i]._children);
+      simulate_clicks(item[i]);
+    }
+    //simulate_clicks(item[i]);
   } 
   item = queue.dequeue()
 }
-
-
-
-  /*var test = False;
-  var i = 0;
-  While (test)
-  {
- //for (i = 0; i < childsFile.length; i++) 
-  //{
-    simulate_clicks(childsFile[i]);
-    // append children to next layer
-    console.log(childsFile[i]);
-    childsFile.push(childsFile[i]._children);
-    childsFile = childsFile.reduce(function(a, b) {return a.concat(b);}, []);
-    console.log(childsFile);
-    i++;
-  } */
 } 
 
