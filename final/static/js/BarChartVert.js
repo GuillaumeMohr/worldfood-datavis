@@ -108,7 +108,7 @@ function update_bars(data) {
 	    .attr('transform', function (d, i) {
 		var height = legendRectSize + legendSpacing;
 		var offset = -gapBetweenGroups/2;
-		var horz = spaceForLabels + chartWidth  - legendRectSize;
+		var horz = spaceForLabels + chartWidth  - legendRectSize - 50;
 		var vert = i * height - offset;
 		return 'translate(' + horz + ',' + vert + ')';
 	    });
