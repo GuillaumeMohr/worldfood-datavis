@@ -1,11 +1,9 @@
  function get_categories(objects) {
 	 var results = [];
-	 if (objects.others != null){
-		 $.each(objects.others.data, function(element, object, array) {
-			 results.push(object.name);
-		 })
-		 //console.log("get_categories detected: ", results);
-	 }
+	 $.each(objects, function(element, object, array) {
+		 results.push(object.mean);
+     })
+	 console.log("get_categories detected: ", results);
 	 return results;
  }
  
@@ -14,24 +12,8 @@
 	 $.each(objects, function(element, object, array) {
 		 results.push(object.mean);
      })
-	 //console.log("get_measures detected: ", results);
+	 console.log("get_measures detected: ", results);
 	 return results;
- }
- 
- function compute_series(stats){
-	 result = []
-	 if (stats.others != null){
-		 result.push({name: stats.others.name,
-					data: get_measures(stats.others.data),
-					pointPadding: 0})
-	 }
-	 
-	 if (stats.product != null){
-		 result.push({name: stats.product.name,
-					data: get_measures(stats.product.data),
-					pointPadding: 0.1})		 
-	 }
-	 return result;
  }
  
  
@@ -41,9 +23,6 @@
     			.setOpacity(0.5)
     			.get('rgba');
     	});
-		
-		
-		var resulted_series = compute_series(stats)
 
         $('#BarChart').highcharts({
             chart: {
@@ -76,7 +55,7 @@
             },
             tooltip: {
                 shared: true,
-                valueSuffix: ' %'
+                valueSuffix: ' mm'
             },
             plotOptions: {
                 column: {
@@ -84,13 +63,24 @@
                 	shadow: false
                 }
             },
-            series: resulted_series
+            series: [{
+                name: stats.product.name,
+                data: get_measures(stats.product.data),
+                pointPadding: 0
+
+            }//, {
+              //  name: 'New York',
+               // data: [83.6, 78.8, 98.5],
+               // pointPadding: 0.1
+
+            //}
+			]
         });
  }
  
  
  $(function (stats) {
-	 //console.log("entered");
+	 console.log("entered");
 	 dict = {
 				others: {
 					name: "Other Sauces",
@@ -108,7 +98,7 @@
 						mean: 11.625,
 						name: "nutrition_score_uk_100g"
 					}, {
-						mean: -15,
+						mean: 15,
 						name: "aautre_valeur_nutri"
 					}]
 				}

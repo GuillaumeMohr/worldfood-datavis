@@ -53,6 +53,7 @@
 
  function update_map(countries) {
 	 if (countries.length > 0){
+		deselect_countries(which) 
 		select_countries(countries)
 	 }
 	 else {

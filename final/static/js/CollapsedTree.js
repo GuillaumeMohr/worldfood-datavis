@@ -25,7 +25,7 @@ var svg = d3.select("#collapsedTree").append("svg")
 // tree init
 d3.json("static/data/data.json", function(error, flare) {
   if (error) throw error;
-  //console.log(flare);
+  ////console.log(flare);
   root = flare;
   root.x0 = height / 2;
   root.y0 = 0;
@@ -41,16 +41,16 @@ d3.json("static/data/data.json", function(error, flare) {
 });
 // tree update
 function update_tree(dataTree,query) {
-  console.log("the returned tree");
-  console.log(dataTree);
+  //console.log("the returned tree");
+  //console.log(dataTree);
   selected_country = query;
   root = dataTree;
   root.x0 = height / 2;
   root.y0 = 0;
   function collapse(d) {
     if (d.children) {
-      console.log(d);
-      console.log("---------");
+      //console.log(d);
+      //console.log("---------");
       d._children = d.children;
       //update(d);
       d._children.forEach(collapse);
@@ -66,14 +66,14 @@ d3.select(self.frameElement).style("height", "800px");
 
 function update(source) {
 
-  //console.log(source);
+  ////console.log(source);
   // Compute the new tree layout.
   var nodes = tree.nodes(root).reverse(),
       links = tree.links(nodes);
-  console.log("the nodes are");
-  console.log(nodes);
-// tree.nodes(root.children[0]).reverse()
+  //console.log("the nodes are");
   //console.log(nodes);
+// tree.nodes(root.children[0]).reverse()
+  ////console.log(nodes);
   // Normalize for fixed-depth.
   nodes.forEach(function(d) { d.y = d.depth * 150; });  // changer la longueur de l'arc
 
@@ -100,7 +100,7 @@ function update(source) {
       .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
       .text(function(d) { return d.name; })  // here we put the name of the node (d.name)
       .style("fill-opacity", 1e-6);
-  //console.log(d.name);
+  ////console.log(d.name);
   // Transition nodes to their new position.
   var nodeUpdate = node.transition()
       .duration(duration)  // duration of nodes creation
@@ -162,7 +162,7 @@ function update(source) {
 // Toggle children on click.
 
 function simulate_clicks(source) {
-  //console.log(source)
+  ////console.log(source)
   if (source.children) {
     source._children = source.children;
     //source._children.forEach(simulate_clicks);
@@ -174,8 +174,8 @@ function simulate_clicks(source) {
     source._children = null;
     
   } 
- console.log("source node to update node");
- console.log(source);
+ //console.log("source node to update node");
+ //console.log(source);
  update(source);
 }
 

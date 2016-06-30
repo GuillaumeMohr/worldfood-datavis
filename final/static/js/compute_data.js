@@ -41,7 +41,7 @@ data = d3.csv('static/data/data.csv')
 		}
 	})
 	.get(function(error, rows) {
-		console.log(rows);
+		//console.log(rows);
 		csv_data = rows;
 	});
 
@@ -50,9 +50,9 @@ var test_new_data_1 = {country_id: null, category: ["root", "Sugary sncacks"]};
 
 
 function rename_nested(data, level) {
-	//console.log("[RENAME_NESTED] input (data, level)");
-	//console.log(data);
-	//console.log(level);
+	////console.log("[RENAME_NESTED] input (data, level)");
+	////console.log(data);
+	////console.log(level);
 	var children = [];
 	if (data.values != null) 
 		children = data.values.map(function(d) {return rename_nested(d, level+1);});
@@ -70,8 +70,8 @@ function compute_data(new_data) {
 	 *   level (int)
 	 *   category (string)
 	 */
-	console.log("[COMPUTE_DATA]: received argument");
-	console.log(new_data);
+	//console.log("[COMPUTE_DATA]: received argument");
+	//console.log(new_data);
 	var country_id_list;
 	var nested_data;
 	var stats;
@@ -80,7 +80,7 @@ function compute_data(new_data) {
 	if ("category" in new_data && new_data.category != null &&
 		 "level" in new_data && new_data.level != null &
 		 "query" in new_data && new_data.query === "reset") {
-		console.log("category is input ! (after reset)");
+		//console.log("category is input ! (after reset)");
 		// we filter on the selected category
 		
 		useful_data = csv_data.filter(function(d) {
@@ -169,7 +169,7 @@ function compute_data(new_data) {
 	else if ("category" in new_data && new_data.category != null &&
 		 "level" in new_data && new_data.level != null &
 		 "query" in new_data && new_data.query != null) {
-		console.log("manage category !");
+		//console.log("manage category !");
 		// we filter on the selected country
 		useful_data = csv_data.filter(function(d) {
 			return d.code_country === new_data.query &&
@@ -236,8 +236,8 @@ function compute_data(new_data) {
 }
 
 function update_all(data) {
-	console.log("update_all");
-	console.log(data);
+	//console.log("update_all");
+	//console.log(data);
 
 	
 	update_tree(data.tree,data.query);
