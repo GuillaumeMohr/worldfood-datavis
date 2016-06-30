@@ -77,8 +77,9 @@
  var svg = d3.select("#map").append("svg")
      .attr("preserveAspectRatio", "xMidYMid")
      .attr("viewBox", "0 0 " + width + " " + height)
-     .attr("width", m_width)
-     .attr("height", m_width * height / width);
+//	 .attr("width", m_width)
+//   .attr("height", m_width * height / width);
+	 .attr("preserveAspectRatio", "xMinYMin");
 
  svg.append("rect")
      .attr("class", "background")
@@ -183,3 +184,4 @@
          zoom(xyz);
      }
  }
+ 
