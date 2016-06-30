@@ -63,6 +63,42 @@ function rename_nested(data, level) {
 	};
 }
 
+function cut_children(tree, max_children) {
+	tree.children = tree.children
+		.map(function(d) {return cut_children(d, max_children);})
+		.slice(0, max_children);
+	return tree;
+}
+
+function compute_tree(useful_data, level) {
+	var children;
+	if(level === 0) children = d3.nest()
+			.key(function(d) { return d.category; })
+			.rollup(function(l) { return null; })
+			.entries(useful_data)
+			.map(function(d) {return rename_nested(d, 1);});
+	else if(level === 1) children = d3.nest()
+			.key(function(d) { return d.category; })
+			.key(function(d) { return d.subcategory; })
+			.rollup(function(l) { return null; })
+			.entries(useful_data)
+			.map(function(d) {return rename_nested(d, 1);});
+	else if(level >= 2) children = d3.nest()
+			.key(function(d) { return d.category; })
+			.key(function(d) { return d.subcategory; })
+			.key(function(d) { return d.product_name; })
+			.rollup(function(l) { return null; })
+			.entries(useful_data)
+			.map(function(d) {return rename_nested(d, 1);});
+	var tree = {
+		name: "root",
+		level: 0,
+		children: children
+	};
+	// we cut at 20 children
+	return cut_children(tree, 20);
+}
+
 function compute_data(new_data) {
 	/* new_data is an object with possible fields :
 	 *   country_id (string): used in case the user click on a country on the map
@@ -87,30 +123,7 @@ function compute_data(new_data) {
 			return d[levels[new_data.level]] === new_data.category;
 		});
 		// we compute the tree
-		var children;
-		if(new_data.level === 0) children = d3.nest()
-				.key(function(d) { return d.category; })
-				.rollup(function(l) { return null; })
-				.entries(useful_data)
-				.map(function(d) {return rename_nested(d, 1);});
-		else if(new_data.level === 1) children = d3.nest()
-				.key(function(d) { return d.category; })
-				.key(function(d) { return d.subcategory; })
-				.rollup(function(l) { return null; })
-				.entries(useful_data)
-				.map(function(d) {return rename_nested(d, 1);});
-		else if(new_data.level >= 2) children = d3.nest()
-				.key(function(d) { return d.category; })
-				.key(function(d) { return d.subcategory; })
-				.key(function(d) { return d.product_name; })
-				.rollup(function(l) { return null; })
-				.entries(useful_data)
-				.map(function(d) {return rename_nested(d, 1);});
-		nested_data = {
-			name: "root",
-			level: 0,
-			children: children
-		};
+		nested_data = compute_tree(useful_data, new_data.level);
 		
 		// and we show all the countries concerned
 		country_id_list = [... new Set(useful_data.map(function(d) {return d.code_country}))];
@@ -120,22 +133,8 @@ function compute_data(new_data) {
 	else if("query" in new_data && new_data.query === "reset") {
 		// we compute the tree
 		useful_data = csv_data;
-		nested_data = {
-			name: "root",
-			level: 0,
-			children: d3.nest()
-				.key(function(d) { return d.category; })
-				.rollup(function(l) { return null; })
-				.entries(useful_data)
-				.map(function(d) {
-					return {
-						name: d.key,
-						level: 1,
-						children: []
-					};
-				})
-		};
-		// and we only show the selected contry
+		nested_data = compute_tree(useful_data, 0);
+		// and we show no country
 		country_id_list = [];
 		query = "reset";
 	}
@@ -146,22 +145,9 @@ function compute_data(new_data) {
 			return (d.code_country === new_data.country_id)
 		});
 		// we compute the tree
-		nested_data = {
-			name: "root",
-			level: 0,
-			children: d3.nest()
-				.key(function(d) { return d.category; })
-				.rollup(function(l) { return null; })
-				.entries(useful_data)
-				.map(function(d) {
-					return {
-						name: d.key,
-						level: 1,
-						children: []
-					};
-				})
-		};
-		// and we only show the selected contry
+		nested_data = compute_tree(useful_data, 0);
+		
+		// and we only show the selected country
 		country_id_list = [new_data.country_id];
 		query = new_data.country_id;
 	}
@@ -176,30 +162,7 @@ function compute_data(new_data) {
 			 	d[levels[new_data.level]] === new_data.category;
 		});
 		// we compute the tree
-		var children;
-		if(new_data.level === 0) children = d3.nest()
-				.key(function(d) { return d.category; })
-				.rollup(function(l) { return null; })
-				.entries(useful_data)
-				.map(function(d) {return rename_nested(d, 1);});
-		else if(new_data.level === 1) children = d3.nest()
-				.key(function(d) { return d.category; })
-				.key(function(d) { return d.subcategory; })
-				.rollup(function(l) { return null; })
-				.entries(useful_data)
-				.map(function(d) {return rename_nested(d, 1);});
-		else if(new_data.level >= 2) children = d3.nest()
-				.key(function(d) { return d.category; })
-				.key(function(d) { return d.subcategory; })
-				.key(function(d) { return d.product_name; })
-				.rollup(function(l) { return null; })
-				.entries(useful_data)
-				.map(function(d) {return rename_nested(d, 1);});
-		nested_data = {
-			name: "root",
-			level: 0,
-			children: children
-		};
+		nested_data = compute_tree(useful_data, new_data.level);
 		
 		// and we only show the selected contry
 		country_id_list = [query];
