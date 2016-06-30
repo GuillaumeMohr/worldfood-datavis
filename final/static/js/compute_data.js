@@ -13,6 +13,12 @@ var nutritionals = [
 	"fat_100g",
 	"carbohydrates_100g"
 ];
+var levels = {
+	0: "root",
+	1: "category",
+	2: "subcategory",
+	3: "product_name"
+}
 
 data = d3.csv('static/data/data.csv')
 	.row(function(r) {
@@ -26,7 +32,7 @@ data = d3.csv('static/data/data.csv')
 			sodium_100g: +r.sodium_100g,
 			salt_100g: +r.salt_100g,	
 			proteins_100g: +r.proteins_100g,
-			energy_100g: +r.energy_100g,
+			//energy_100g: +r.energy_100g,
 			saturated_fat_100g: +r["saturated-fat_100g"],	
 			sugars_100g: +r.sugars_100g,
 			fat_100g: +r.fat_100g,
@@ -104,8 +110,43 @@ function compute_data(new_data) {
 	var nested_data;
 	var stats;
 	var useful_data;
+	// Second case next step : a category or a product has been selected
+	if ("category" in new_data && new_data.category != null &&
+		 "level" in new_data && new_data.level != null &
+		 "query" in new_data && new_data.query === "reset") {
+		console.log("category is input ! (after reset)");
+		// we filter on the selected category
+		
+		useful_data = csv_data.filter(function(d) {
+			return d[levels[new_data.level]] === new_data.category;
+		});
+		// we compute the tree
+		nested_data = {
+			name: "root",
+			level: 0,
+			children: d3.nest()
+				.key(function(d) { return d.category; })
+				.key(function(d) { return d.subcategory; })
+				.key(function(d) { return d.product_name; })
+				.rollup(function(l) { return null; })
+				.entries(useful_data)
+				.map(function(d) {return rename_nested(d, 1);})
+		};
+		// we prune the tree
+		console.log("[COMPUTE_DATA]: full tree before pruning");
+		console.log(nested_data);
+
+		nested_data = prune_nested(nested_data, new_data.level, new_data.category);
+
+		console.log("[COMPUTE_DATA]: tree after pruning");
+		console.log(nested_data);
+		
+		// and we show all the countries concerned
+		country_id_list = [... new Set(csv_data.map(function(d) {return d.code_country}))];
+		query = "reset";
+	}
 	// Reset case
-	if("query" in new_data && new_data.query === "reset") {
+	else if("query" in new_data && new_data.query === "reset") {
 		// we compute the tree
 		useful_data = csv_data;
 		nested_data = {
@@ -125,7 +166,7 @@ function compute_data(new_data) {
 		};
 		// and we only show the selected contry
 		country_id_list = [];
-		query = new_data.country_id;
+		query = "reset";
 	}
 	// Fist case : the country_id
 	else if("country_id" in new_data && new_data.country_id != null) {
@@ -189,17 +230,26 @@ function compute_data(new_data) {
 	}
 	// we compute the stats
 	stats = {
-		product: null,
-		others: {
-			name: "All Products",
-			data: nutritionals.map(function(n) {
-				return {
-					name: n,
-					mean: d3.mean(useful_data, function(d) { return d[n] })
-				};
-			})
-		}
-	};
+		labels: nutritionals,
+		series: [
+			{
+			label: 'Nutritional Value',
+			values: nutritionals.map(function(n) {
+				var m = d3.mean(useful_data, function(d) { return d[n] });
+				if(typeof m !== 'undefined') return m;
+				return 0;
+				})
+			},
+			{
+			label: 'Mean nutritional value of category',
+			values: nutritionals.map(function(n) {
+				var m = d3.mean(csv_data, function(d) { return d[n] });
+				if(typeof m !== 'undefined') return m;
+				return 0;
+				})
+			}
+		]
+	}
 	update_all({
 		country_id_list: country_id_list,
 		tree: nested_data,
@@ -215,6 +265,5 @@ function update_all(data) {
 	
 	update_tree(data.tree,data.query);
 	update_map(data.country_id_list);
-	
-	//update_bars(data.stats);
+	update_bars(data.stats);
 }

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+.reset{
+    height:15%;
+    width:100%;
+}
 .node {
   cursor: pointer;
 }
@@ -23,9 +27,6 @@
   shape-rendering: crispEdges;
 }
 
-.bar text {
-  fill: #fff;
-}
 
 .axis path, .axis line {
   fill: none;
@@ -58,6 +59,33 @@
       margin-bottom: 0;
       padding: 9.5px;
     }
+
+.chart .legend {
+	fill: black;
+	font: 14px sans-serif;
+	text-anchor: start;
+	font-size: 12px;
+}
+
+.chart text {
+	fill: black;
+	font: 10px sans-serif;
+	text-anchor: start;
+}
+
+.chart .label {
+	fill: black;
+	font: 14px sans-serif;
+	text-anchor: end;
+}
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+
 </style>
 
 
@@ -69,7 +97,6 @@
 </head>
 
 <body class="application">
-
   <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -91,9 +118,19 @@
           </div>
         </div>
       </div>
+	  
+	  
 
       <!-- begin adding CollapsedTree here -->
       <div class="col-sm-6">
+	  <div >
+		<input name="ResetButton" 
+           type="button" 
+           value="Reset Query" 
+		   class="reset"
+           onclick="compute_data({query:'reset' } )"/>
+	  </div>
+	  <br/>
         <div class="chart-wrapper">
 
           <div class="chart-title">
@@ -107,12 +144,7 @@
         </div>
       </div>
       <!-- end  -->
-	  <div class="col-sm-6">
-		<input name="ResetButton" 
-           type="button" 
-           value="Reset" 
-           onclick="compute_data({query:'reset' } )"/>
-	  </div>
+	  
       <!-- add the bar chart here -->
 
      <div class="col-sm-6">
@@ -121,12 +153,13 @@
             Bar Chart
           </div>
           <div class="chart-stage">
-            <div id="BarChart"></div>
+            <svg class="chart"></svg>
           </div>
         </div>
       </div>
       </div>
     </div>
+	
     <hr>
     
 
@@ -138,11 +171,8 @@
   <script src="./static/lib/js/d3.min.js"></script> 
   <script src="//d3js.org/topojson.v1.min.js"></script>
 
-  <script src="http://code.highcharts.com/highcharts.js"></script>
-  <script src="http://code.highcharts.com/modules/exporting.js"></script>
-
   
-  <script src='./static/js/BarChart.js' type='text/javascript'></script> 
+  <script src='./static/js/BarChartVert.js' type='text/javascript'></script> 
   <script src='./static/js/WorldMap.js' type='text/javascript'></script>
   <script src='./static/js/CollapsedTree.js' type='text/javascript'></script> 
   <script src='./static/js/compute_data.js' type='text/javascript'></script> 

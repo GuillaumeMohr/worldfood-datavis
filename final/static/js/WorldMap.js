@@ -26,10 +26,12 @@
  };
 
  function deselect_countries(countries) {
-     $.each(countries, function(element, country, array) {
-             var one_country = document.getElementById(country);
-             $(one_country).attr("class", "")
-         })
+	 if (countries != null){
+		 $.each(countries, function(element, country, array) {
+				 var one_country = document.getElementById(country);
+				 $(one_country).attr("class", "")
+			 })
+	 }
          //which = null;
  }
 
@@ -75,8 +77,9 @@
  var svg = d3.select("#map").append("svg")
      .attr("preserveAspectRatio", "xMidYMid")
      .attr("viewBox", "0 0 " + width + " " + height)
-     .attr("width", m_width)
-     .attr("height", m_width * height / width);
+//	 .attr("width", m_width)
+//   .attr("height", m_width * height / width);
+	 .attr("preserveAspectRatio", "xMinYMin");
 
  svg.append("rect")
      .attr("class", "background")
@@ -181,3 +184,4 @@
          zoom(xyz);
      }
  }
+ 
