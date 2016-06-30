@@ -113,7 +113,7 @@ function compute_data(new_data) {
 		};
 		
 		// and we show all the countries concerned
-		country_id_list = [... new Set(csv_data.map(function(d) {return d.code_country}))];
+		country_id_list = [... new Set(useful_data.map(function(d) {return d.code_country}))];
 		query = "reset";
 	}
 	// Reset case
