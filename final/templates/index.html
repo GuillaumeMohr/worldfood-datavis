@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+.reset{
+    height:15%;
+    width:100%;
+}
 .node {
   cursor: pointer;
 }
@@ -97,7 +101,6 @@
 </head>
 
 <body class="application">
-
   <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -119,9 +122,19 @@
           </div>
         </div>
       </div>
+	  
+	  
 
       <!-- begin adding CollapsedTree here -->
       <div class="col-sm-6">
+	  <div >
+		<input name="ResetButton" 
+           type="button" 
+           value="Reset Query" 
+		   class="reset"
+           onclick="compute_data({query:'reset' } )"/>
+	  </div>
+	  <br/>
         <div class="chart-wrapper">
 
           <div class="chart-title">
@@ -135,12 +148,7 @@
         </div>
       </div>
       <!-- end  -->
-	  <div class="col-sm-6">
-		<input name="ResetButton" 
-           type="button" 
-           value="Reset" 
-           onclick="compute_data({query:'reset' } )"/>
-	  </div>
+	  
       <!-- add the bar chart here -->
 
      <div class="col-sm-6">
@@ -155,6 +163,7 @@
       </div>
       </div>
     </div>
+	
     <hr>
     
 
