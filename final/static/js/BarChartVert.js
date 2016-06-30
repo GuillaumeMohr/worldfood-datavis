@@ -5,11 +5,11 @@ var data_bars = {
   ],
   series: [
     {
-      label: 'Nutritional Value',
+      label: 'Selection',
       values: [4, 8, 15, 16, 23, 42,63,20,29]
     },
     {
-      label: 'Mean nutritional value of category',
+      label: 'Global',
       values: [12, 43, 22, 11, 73, 25,53,30,19]
     }]
 };
@@ -134,26 +134,5 @@ function update_bars(data) {
 		.transition().duration(1000)
 		.attr("x", function(d) { return x(d) + 3; })
 		.text(function(d) { return d.toFixed(1); });
-	/*
-	// Add text label in bar
-	bar.append("text")
-	    .attr("x", function(d) { return x(d) - 3; })
-	    .attr("y", barHeight / 2)
-	    .attr("fill", "red")
-	    .attr("dy", ".35em")
-	    .text(function(d) { return d; });
-
-	// Draw labels
-	bar.append("text")
-	    .attr("class", "label")
-	    .attr("x", function(d) { return - 10; })
-	    .attr("y", groupHeight / 2)
-	    .attr("dy", ".35em")
-	    .text(function(d,i) {
-	      if (i % data.series.length === 0)
-		return data.labels[Math.floor(i/data.series.length)];
-	      else
-		return ""});
-	*/
 
 }

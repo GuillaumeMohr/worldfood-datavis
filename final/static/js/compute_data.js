@@ -210,7 +210,7 @@ function compute_data(new_data) {
 		labels: nutritionals,
 		series: [
 			{
-			label: 'Nutritional Value',
+			label: 'Selection',
 			values: nutritionals.map(function(n) {
 				var m = d3.mean(useful_data, function(d) { return d[n] });
 				if(typeof m !== 'undefined') return m;
@@ -218,7 +218,7 @@ function compute_data(new_data) {
 				})
 			},
 			{
-			label: 'Mean nutritional value of category',
+			label: 'All products',
 			values: nutritionals.map(function(n) {
 				var m = d3.mean(csv_data, function(d) { return d[n] });
 				if(typeof m !== 'undefined') return m;
