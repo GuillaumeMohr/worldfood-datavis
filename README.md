@@ -3,10 +3,10 @@ INF344 - 2016
 Visualization class group project
 
 ## Team 
-Khalil CHOUROU
-Siham LAAROUSSI
-Guillaume MOHR
-Mohamed Amine SALEM
+Khalil CHOUROU  
+Siham LAAROUSSI  
+Guillaume MOHR  
+Mohamed Amine SALEM  
 
 ## Data
 Data is available online at http://world.openfoodfacts.org/data/en.openfoodfacts.org.products.csv but because of its size 
